@@ -6,7 +6,6 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.androidapp.databinding.ActivityMainBinding
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -14,7 +13,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navbarView: BottomNavigationView
     private lateinit var fragmentContainer: ConstraintLayout
-    private lateinit var topAppBar: MaterialToolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +22,6 @@ class MainActivity : AppCompatActivity() {
 
         navbarView = findViewById(R.id.bottom_navigation)
         fragmentContainer = findViewById(R.id.fragment_container)
-        topAppBar = findViewById(R.id.top_app_bar)
 
         // Load the recipes page by default.
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, FragmentRecipes()).commit()
@@ -33,17 +30,13 @@ class MainActivity : AppCompatActivity() {
         navbarView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.page_recipes -> {
-                    topAppBar.setTitle(R.string.recipes_title)
                     // update the action bar for recipes search page
-                    updateActionBar();
                     supportFragmentManager.beginTransaction().replace(R.id.fragment_container, FragmentRecipes()).commit()
                     true
                 }
 
                 R.id.page_inventory -> {
-                    topAppBar.setTitle(R.string.inventory_title)
                     // update the action bar for inventory page
-                    updateActionBar();
                     supportFragmentManager.beginTransaction().replace(R.id.fragment_container, FragmentInventory()).commit()
                     true
                 }
@@ -70,11 +63,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // Updates the action bar based on the specific fragment page
-    fun updateActionBar() {
-        val recipeFilterButton = topAppBar.menu.findItem(R.id.action_recipe_filter)
-
-        //enable filter button if it is recipe search page.
-        recipeFilterButton.isVisible = topAppBar.title == "Recipes"
-    }
 }
