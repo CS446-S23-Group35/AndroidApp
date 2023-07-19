@@ -71,7 +71,7 @@ class FragmentRecipes : Fragment() {
 
     // Request to add recipes to the recipeViewModel.
     // The information is hardcoded which will be later provided by the search engine.
-    // As such the worflow must be moved to the server/interface side. And must not be kept in client side.
+    // As such the workflow must be moved to the server/interface side. And must not be kept in client side.
     fun createRecipes(recipeViewModel: RecipeViewModel) {
         recipeViewModel.addRecipe("LAMB BIRYANI", listOf("plain yogurt", "skinless chicken pieces",  "basmati rice", "vegetable oil" ), "2 hrs 15 mins", "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2022/07/27/0/YAHI_Dum-Aloo-Biryani_s4x3.jpg.rend.hgtvcom.826.620.suffix/1658954351318.jpeg");
         recipeViewModel.addRecipe("PHỞ BÒ", listOf("Beef brisket", "lb beef shank", "cooked rice noodles" ), "8 hrs 25 mins", "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2018/11/30/0/FNK_Instant-Pot-Beef-Pho-H_s4x3.jpg.rend.hgtvcom.826.620.suffix/1548176890147.jpeg");
