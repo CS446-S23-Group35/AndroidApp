@@ -2,13 +2,12 @@ package com.example.androidapp
 
 import android.app.AlertDialog
 import android.app.ProgressDialog.show
-import android.content.Context
 import android.content.DialogInterface
 import android.net.wifi.WifiConfiguration.AuthAlgorithm.strings
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.LinearLayout
@@ -17,8 +16,13 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.androidapp.databinding.FragmentInventoryBinding
+import android.content.Context
+import android.view.GestureDetector
+import android.view.MotionEvent
+import android.view.View
+import androidx.recyclerview.widget.RecyclerView
+
 
 private var _binding: FragmentInventoryBinding? = null
 val ingredient_list = mutableListOf<String>("Beef", "Rice noodles", "Cilantro")
@@ -26,6 +30,49 @@ val ingredient_list = mutableListOf<String>("Beef", "Rice noodles", "Cilantro")
 // This property is only valid between onCreateView and
 // onDestroyView.
 private val binding get() = _binding!!
+
+
+class RecyclerTouchListener(
+    context: Context,
+    recyclerView: RecyclerView,
+    private val clickListener: ClickListener
+) : RecyclerView.OnItemTouchListener {
+
+    private val gestureDetector: GestureDetector
+
+    init {
+        gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onSingleTapUp(e: MotionEvent): Boolean {
+                return true
+            }
+
+            override fun onLongPress(e: MotionEvent) {
+                val child: View? = recyclerView.findChildViewUnder(e.x, e.y)
+                if (child != null) {
+                    clickListener.onLongClick(child, recyclerView.getChildAdapterPosition(child))
+                }
+            }
+        })
+    }
+
+    override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+        val childView: View? = rv.findChildViewUnder(e.x, e.y)
+        if (childView != null && gestureDetector.onTouchEvent(e)) {
+            clickListener.onClick(childView, rv.getChildAdapterPosition(childView))
+            return true
+        }
+        return false
+    }
+
+    override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
+
+    override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+
+    interface ClickListener {
+        fun onClick(view: View, position: Int)
+        fun onLongClick(view: View, position: Int)
+    }
+}
 
 
 class FragmentInventory : Fragment() {
@@ -45,6 +92,8 @@ class FragmentInventory : Fragment() {
     fun showPopup(itemSelected: String) {
 
 
+        println("Show popup called")
+
 
         val popUpCardView = layoutInflater.inflate(R.layout.inventory_item_popup,
             null)
@@ -59,9 +108,11 @@ class FragmentInventory : Fragment() {
 
 
 
-        val window = PopupWindow(popUpCardView, LinearLayout.LayoutParams.WRAP_CONTENT, 200, true)
+        val window = PopupWindow(popUpCardView, LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT, true)
 
         window.showAtLocation(view, Gravity.CENTER, 0, 100)
+
 
 
 //        val builder: AlertDialog.Builder = AlertDialog.Builder(context)
@@ -80,6 +131,7 @@ class FragmentInventory : Fragment() {
 //            })
 
 
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -94,6 +146,28 @@ class FragmentInventory : Fragment() {
         // adapter instance is set to the
         // recyclerview to inflate the items.
         recyclerView.adapter = itemAdapter
+
+        //recyclerView.addOnItemTouchListener()
+
+
+        recyclerView.addOnItemTouchListener(
+
+            RecyclerTouchListener(
+                requireContext(),
+                recyclerView,
+                object : RecyclerTouchListener.ClickListener {
+                    override fun onClick(view: View, position: Int) {
+                        println("ShowPopup called from onClick listener ")
+                        showPopup(ingredient_list[0])
+                        // Handle click event
+                    }
+
+                    override fun onLongClick(view: View, position: Int) {
+                        // Handle long click event
+                    }
+                }
+            )
+        )
 
         binding.ingredientNameField.setEndIconOnClickListener {
             val str = binding.ingredientNameField.editText?.text.toString()
@@ -117,9 +191,8 @@ class FragmentInventory : Fragment() {
 
 
         binding.ingredientList.setOnClickListener{
-            val selectedItem = ingredient_list[0]
-            showPopup(selectedItem)
-
+//            val selectedItem = ingredient_list[0]
+//            showPopup(selectedItem)
 
         }
     }
