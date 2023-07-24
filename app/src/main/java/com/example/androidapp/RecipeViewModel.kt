@@ -35,7 +35,7 @@ class RecipeViewModel : ViewModel() {
 
         recipes.clear();
 
-        queriedRecipes.forEach { recipe ->
+        nwManager.getRecipes(query)?.forEach { recipe ->
 
             var ingredients = mutableListOf<String>()
 

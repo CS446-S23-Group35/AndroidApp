@@ -1,6 +1,14 @@
 buildscript {
+    ext {
+        kotlin_version = '1.9.0'
+    }
     dependencies {
         classpath "com.google.protobuf:protobuf-gradle-plugin:0.9.3"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+    repositories {
+        mavenCentral()
+        maven{url 'https://jitpack.io'}
     }
 }
 

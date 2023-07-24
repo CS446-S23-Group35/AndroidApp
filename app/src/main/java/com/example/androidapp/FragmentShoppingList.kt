@@ -12,19 +12,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.example.androidapp.databinding.FragmentInventoryBinding
+import com.example.androidapp.databinding.FragmentShoppinglistBinding
 
 // ADD LOGIC TO ADD QUANTITY WHILE ADDING
 
-private var _binding: FragmentInventoryBinding? = null
-val ingredient_list = mutableListOf<String>("Beef", "Rice noodles", "Cilantro")
-val ingredient_list_quant = mutableListOf<String>("250gm", "200gm", "10gm")
+private var _binding: FragmentShoppinglistBinding? = null
+val shopping_list = mutableListOf<String>("Beef", "Rice noodles", "Cilantro")
+val shopping_list_quant = mutableListOf<String>("250gm", "200gm", "10gm")
 
 // This property is only valid between onCreateView and
 // onDestroyView.
 private val binding get() = _binding!!
 
-class Adapter(private val ingredient_list: MutableList<String>, private val ingredient_list_quant: MutableList<String>) : RecyclerView.Adapter<Adapter.MyViewHolder>() {
+class AdapterShopping(private val shopping_list: MutableList<String>, private val shopping_list_quant: MutableList<String>) : RecyclerView.Adapter<AdapterShopping.MyViewHolder>() {
 
     private val checkedItems = mutableListOf<Int>()
     private var checkboxVisibility = View.INVISIBLE
@@ -44,8 +44,8 @@ class Adapter(private val ingredient_list: MutableList<String>, private val ingr
     // This method binds the data to the ViewHolder object
     // for each item in the RecyclerView
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.ingredient.text = ingredient_list[position]
-        holder.quantity.text = ingredient_list_quant[position]
+        holder.ingredient.text = shopping_list[position]
+        holder.quantity.text = shopping_list_quant[position]
         holder.checkBox.visibility = checkboxVisibility
     }
 
@@ -64,8 +64,8 @@ class Adapter(private val ingredient_list: MutableList<String>, private val ingr
     fun deleteItems(itemsToDelete: List<Int>) {
         val sortedItems = itemsToDelete.sortedDescending()
         sortedItems.forEach { position ->
-            ingredient_list.removeAt(position)
-            ingredient_list_quant.removeAt(position)
+            shopping_list.removeAt(position)
+            shopping_list_quant.removeAt(position)
             notifyItemRemoved(position)
         }
         checkedItems.clear()
@@ -93,7 +93,7 @@ class Adapter(private val ingredient_list: MutableList<String>, private val ingr
     }
 }
 
-class FragmentInventory : Fragment() {
+class FragmentShoppingList : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,7 +103,7 @@ class FragmentInventory : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentInventoryBinding.inflate(inflater, container, false)
+        _binding = FragmentShoppinglistBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -111,10 +111,10 @@ class FragmentInventory : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         // getting the ingredientlist
         // Assign ingredientlist to ItemAdapter
-        val itemAdapter = AdapterShopping(ingredient_list, ingredient_list_quant)
+        val itemAdapter = AdapterShopping(shopping_list, shopping_list_quant)
         // Set the LayoutManager that
         // this RecyclerView will use.
-        val recyclerView: RecyclerView = view.findViewById(R.id.ingredient_list)
+        val recyclerView: RecyclerView = view.findViewById(R.id.shopping_list)
         recyclerView.layoutManager = LinearLayoutManager(context)
         // adapter instance is set to the
         // recyclerview to inflate the items.
@@ -122,8 +122,8 @@ class FragmentInventory : Fragment() {
 
         binding.add.setOnClickListener {
             showAddItemDialog()
-            ingredient_list.add("str")
-            ingredient_list_quant.add("100gm")
+            shopping_list.add("str")
+            shopping_list_quant.add("100gm")
             itemAdapter.notifyDataSetChanged()
         }
 
@@ -131,25 +131,13 @@ class FragmentInventory : Fragment() {
         binding.select.setOnClickListener {
             var nextState = if (binding.delete.isVisible) View.GONE else View.VISIBLE
             binding.delete.visibility = nextState
-            binding.editInv.visibility = nextState
+            binding.addInv.visibility = nextState
             itemAdapter.toggleCheckBoxVisiblity()
         }
 
         binding.delete.setOnClickListener{
             val selectedItems = itemAdapter.getSelectedItems()
             itemAdapter.deleteItems(selectedItems)
-        }
-
-        binding.editInv.setOnClickListener{
-            val selectedItems = itemAdapter.getSelectedItems()
-            val editModeFragment = EditModeFragment.newInstance(true,
-                selectedItems as ArrayList<Int>
-            )
-            val fragmentManager = requireActivity().supportFragmentManager
-            fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, editModeFragment)
-                .addToBackStack(null) // Optional: Add to the back stack if you want to navigate back
-                .commit()
         }
     }
 
