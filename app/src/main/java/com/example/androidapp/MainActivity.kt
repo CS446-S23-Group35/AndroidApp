@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.example.androidapp.databinding.ActivityMainBinding
+import com.example.androidapp.model.FragmentAccount
 
 class MainActivity : AppCompatActivity() {
 
@@ -47,6 +48,14 @@ class MainActivity : AppCompatActivity() {
                     // update the action bar for inventory page
                     updateActionBar();
                     supportFragmentManager.beginTransaction().replace(R.id.fragment_container, FragmentReceiptScanner()).commit()
+                    true
+                }
+
+                R.id.page_account -> {
+                    binding.topAppBar.setTitle(R.string.account_title)
+                    // update the action bar for inventory page
+                    updateActionBar();
+                    supportFragmentManager.beginTransaction().replace(R.id.fragment_container, FragmentAccount()).commit()
                     true
                 }
 
