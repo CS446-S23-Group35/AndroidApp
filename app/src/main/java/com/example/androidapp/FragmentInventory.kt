@@ -31,14 +31,20 @@ class Adapter(private val ingredient_list: MutableList<String>, private val ingr
     // This method creates a new ViewHolder object for each item in the RecyclerView
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         // Inflate the layout for each item and return a new ViewHolder object
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_shopping, parent, false)
-        return MyViewHolder(itemView)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_list, parent, false)
+        val viewHolder = MyViewHolder(itemView)
+        viewHolder.ingredient.setOnLongClickListener {
+            toggleCheckBoxVisiblity()
+            binding.delete.visibility = if (binding.delete.isVisible) View.GONE else View.VISIBLE
+            return@setOnLongClickListener true
+        }
+        return viewHolder
     }
 
     // This method returns the total
     // number of items in the data set
     override fun getItemCount(): Int {
-        return shopping_list.size
+        return ingredient_list.size
     }
 
     // This method binds the data to the ViewHolder object
@@ -64,6 +70,7 @@ class Adapter(private val ingredient_list: MutableList<String>, private val ingr
     fun deleteItems(itemsToDelete: List<Int>) {
         val sortedItems = itemsToDelete.sortedDescending()
         sortedItems.forEach { position ->
+            print(position)
             ingredient_list.removeAt(position)
             ingredient_list_quant.removeAt(position)
             notifyItemRemoved(position)
@@ -79,6 +86,9 @@ class Adapter(private val ingredient_list: MutableList<String>, private val ingr
         val quantity: TextView = itemView.findViewById(R.id.quantity)
 
         init {
+            ingredient.setOnClickListener {
+                checkBox.isChecked = !checkBox.isChecked
+            }
             checkBox.setOnCheckedChangeListener { _, isChecked ->
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
@@ -120,24 +130,20 @@ class FragmentInventory : Fragment() {
         // recyclerview to inflate the items.
         recyclerView.adapter = itemAdapter
 
-        binding.add.setOnClickListener {
-            showAddItemDialog()
-            ingredient_list.add("str")
-            ingredient_list_quant.add("100gm")
-            itemAdapter.notifyDataSetChanged()
+        binding.ingredientNameField.setEndIconOnClickListener {
+            val str = binding.ingredientNameField.editText?.text.toString()
+            if(str.isNotEmpty()) {
+                ingredient_list.add(str)
+                binding.ingredientNameField.editText?.text?.clear()
+                itemAdapter.notifyDataSetChanged()
+            }
         }
 
-
-        binding.select.setOnClickListener {
-            var nextState = if (binding.delete.isVisible) View.GONE else View.VISIBLE
-            binding.delete.visibility = nextState
-            binding.editInv.visibility = nextState
-            itemAdapter.toggleCheckBoxVisiblity()
-        }
-
-        binding.delete.setOnClickListener{
+        binding.delete.setOnClickListener {
             val selectedItems = itemAdapter.getSelectedItems()
             itemAdapter.deleteItems(selectedItems)
+            itemAdapter.toggleCheckBoxVisiblity()
+            binding.delete.visibility = View.GONE
         }
 
         binding.editInv.setOnClickListener{

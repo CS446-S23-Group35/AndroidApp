@@ -6,7 +6,6 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-
     <string name="recipes_title">Recipes</string>
     <string name="recipes_filter">Recipes Filter</string>
     <string name="inventory_title">Inventory</string>
@@ -16,6 +15,19 @@
     <string name="add_inventory_item">Add</string>
     <string name="recipe_suggestion_text">Based on your inventory...</string>
     <string name="searchbar_hint">Recipe names</string>
+    <string name="auth_greeting">The go-to app to minimize your food waste and get delicious recipes out of your inventory.</string>
+    <string name="sign_in">Sign in</string>
+    <string name="register">Register</string>
+    <string name="email">Email</string>
+    <string name="register_hint">Don\'t have an account? <u>Sign up here!</u></string>
+    <string name="register_password">Password <b>(min 8 characters)</b></string>
+    <string name="sign_in_hint">Already have an account? <u>Sign in here!</u></string>
+    <string name="register_username">Username <b>(min 3 characters)</b></string>
+    <string name="username">Username</string>
+    <string name="verification_code">Verification code</string>
+    <string name="capture_image">Capture</string>
+    <string name="success_toast">Receipt has successfully been parsed</string>
+    <string name="warning_toast">Receipt not successfully parsed</string>
     <string name="select">Select</string>
     <string name="add_to_inventory">Add to Inventory</string>
     <string name="delete">Delete</string>
