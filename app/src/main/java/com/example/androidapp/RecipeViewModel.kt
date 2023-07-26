@@ -8,12 +8,16 @@ import java.text.Normalizer
 
 class RecipeViewModel : ViewModel() {
     // list of recipes passed by server
-    private var recipes =  mutableListOf<Recipe>();
+    var recipes =  mutableListOf<Recipe>();
 
     // list of recipes being displayed.
     private var liveRecipes =  MutableLiveData<List<Recipe>>()
 
     init {
+        recipes.forEach{
+            //it.initializeValues()
+        }
+        //liveRecipes[0]
 
     }
 
@@ -35,7 +39,7 @@ class RecipeViewModel : ViewModel() {
 
     // fetch recipes whose name matches the query.
     fun queryRecipes(query: String) {
-        liveRecipes.value = recipes.filter { Normalizer.normalize(it.getName().lowercase(), Normalizer.Form.NFD).contains(query) }
+        liveRecipes.value = recipes.filter { Normalizer.normalize(it.name, Normalizer.Form.NFD).contains(query) }
             .toList()
             .takeIf { query != "" }
             ?: recipes.toList()
