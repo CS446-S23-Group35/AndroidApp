@@ -13,7 +13,7 @@ import com.example.androidapp.R
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DateSelectionFragment : Fragment() {
+class FragmentPreferences : Fragment() {
 
     interface OnDateSelectionListener {
         fun onDatesSelected(dates: List<String>, text: String)
@@ -59,7 +59,13 @@ class DateSelectionFragment : Fragment() {
             val text = editText.text.toString()
 
             // add dates and ingredients to forbidden list
-            onDateSelectionListener.onDatesSelected(selectedDates, text)
+            // onDateSelectionListener.onDatesSelected(selectedDates, text)
+
+            val fragmentPreferences = FragmentAccount()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragmentPreferences)
+                .addToBackStack(null)
+                .commit()
         }
 
         return view

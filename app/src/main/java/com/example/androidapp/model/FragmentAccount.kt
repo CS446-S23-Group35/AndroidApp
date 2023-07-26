@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.example.androidapp.R
 import com.example.androidapp.databinding.FragmentAccountBinding
+import com.example.androidapp.databinding.FragmentPreferencesBinding
 
 val itemList = listOf(
     AcountItem(R.drawable.baseline_build_24, "Preferences"),
@@ -79,5 +80,14 @@ class FragmentAccount : Fragment(), ListAdapter.OnItemClickListener {
 
     override fun onItemClick(position: Int) {
         val selectedItem = itemList[position].text
+        if (selectedItem == "Preferences") {
+            // Switch to FragmentPreferences when "Preferences" is clicked
+            val fragmentPreferences = FragmentPreferences()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragmentPreferences)
+                .addToBackStack(null)
+                .commit()
+        }
+
     }
 }
