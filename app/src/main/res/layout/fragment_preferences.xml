@@ -15,7 +15,7 @@
         android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Ingredients here" />
+        android:hint="Enter forbidden ingredients here" />
 
     <!-- Select All checkbox -->
     <CheckBox
@@ -24,25 +24,11 @@
         android:layout_height="wrap_content"
         android:text="Select All" />
 
-    <!-- Buttons to confirm or cancel selection -->
-    <LinearLayout
+    <!-- Button to confirm selection -->
+    <Button
+        android:id="@+id/buttonConfirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/buttonCancel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Cancel" />
-
-        <Button
-            android:id="@+id/buttonConfirm"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Confirm" />
-    </LinearLayout>
+        android:text="Confirm" />
 
 </LinearLayout>
