@@ -44,22 +44,5 @@ class RecipeViewModel : ViewModel() {
         recipes.clear()
         recipes.addAll(queriedRecipes)
         liveRecipes.value = recipes.toList()
-
-
-//        recipes.clear();
-//
-//        queriedRecipes.forEach { recipe ->
-//
-//            var ingredients = mutableListOf<String>()
-//
-//            recipe.ingredientsList.forEach { ingredient ->
-//                ingredients.add(ingredient.name)
-//            }
-//
-//            val recipeTime = recipe.metadata.minutesToCook.toString() + " mins";
-//
-//            recipes.add(Recipe(recipe.name, ingredients, recipeTime, recipe.metadata.imageUrl))
-//        }
-//        liveRecipes.value = recipes.toList();
     }
 }
